@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>🫏 Jegue Tycoon — o império do sertão</title>
+<meta name="description" content="Faça carinho no jegue, monte sua fazenda do sertão e vire magnata neste idle/clicker brasileiríssimo." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+<!-- CSS modular: tokens -> base -> cena -> componentes -> painéis -> animações -->
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/scene.css" />
+<link rel="stylesheet" href="css/components.css" />
+<link rel="stylesheet" href="css/panels.css" />
+<link rel="stylesheet" href="css/animations.css" />
+<link rel="stylesheet" href="css/scenefx.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== HEADER / HUD ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <div id="coin3d">🪙</div>
+      <h1>JEGUE TYCOON<small>O IMPÉRIO DO SERTÃO</small></h1>
+    </div>
+    <div class="hud">
+      <div class="stat"><div class="v big" id="coins">0</div><div class="l">moedas 🪙</div></div>
+      <div class="stat"><div class="v" id="cps">0/s</div><div class="l">por segundo</div></div>
+      <div class="stat"><div class="v" id="click-val">+1/carinho</div><div class="l">por clique</div></div>
+      <div class="stat" id="star-wrap" style="display:none"><div class="v"><span id="stars">0</span>⭐</div><div class="l">prestígio <span id="prestige-lvl">0</span></div></div>
+      <div class="stat"><div class="v" id="clicks">0</div><div class="l">carinhos</div></div>
+    </div>
+  </header>
+
+  <!-- ===== NEWS TICKER ===== -->
+  <div class="news" id="news">📰 Carregando as fofocas do sertão...</div>
+
+  <!-- ===== ÁREA PRINCIPAL ===== -->
+  <div class="main">
+
+    <!-- CENA DO JEGUE -->
+    <section id="scene" aria-label="Sua fazenda de jegue">
+      <div id="sun"></div>
+      <div id="hills"></div>
+      <div class="cactus" id="c1">🌵</div>
+      <div class="cactus" id="c2">🌵</div>
+      <div class="tuft t1">🌾</div><div class="tuft t2">🌿</div><div class="tuft t3">🌾</div>
+
+      <!-- decorações que aparecem conforme você desbloqueia geradores -->
+      <div class="bunting" id="dec-forro" style="display:none"></div>
+      <div class="dec" id="dec-vaquejada" style="display:none">🐂</div>
+      <div class="dec" id="dec-parque" style="display:none">🎡</div>
+      <div class="dec" id="dec-influencer" style="display:none">💗</div>
+      <div class="dec" id="dec-espaco" style="display:none">🚀</div>
+      <div class="dec" id="dec-multi" style="display:none">🌀</div>
+      <!-- camada de clima dos buffs (estrelas/luzes), controlada por classe na cena -->
+      <div class="weather" id="weather"></div>
+
+      <div id="buffbar"></div>
+
+      <div id="jegue-wrap" role="button" tabindex="0" aria-label="Fazer carinho no jegue para ganhar moedas">
+        <svg id="jegue" viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg"
+             style="--coat:#a9b0b8;--coat-lt:#cfd4da;--mane:#6d7177;--muz:#dfe3e7;--tail:#7d8189">
+          <!-- sombra -->
+          <ellipse cx="130" cy="222" rx="78" ry="14" fill="rgba(80,45,10,.18)"/>
+
+          <!-- ===== ACESSÓRIOS ATRÁS (capa, asas) ===== -->
+          <g id="acc-capa" style="display:none">
+            <path d="M86,118 q44,-22 88,0 l16,86 q-60,22 -120,0 z" fill="#d64545"/>
+            <path d="M86,118 q44,-22 88,0 l4,18 q-48,-16 -96,0 z" fill="#b53333"/>
+          </g>
+          <g id="acc-asas" style="display:none">
+            <path d="M92,120 q-58,-26 -78,18 q40,-6 64,16 q-2,-26 14,-34 z" fill="#fdfdff" stroke="#e6e9f2" stroke-width="2"/>
+            <path d="M168,120 q58,-26 78,18 q-40,-6 -64,16 q2,-26 -14,-34 z" fill="#fdfdff" stroke="#e6e9f2" stroke-width="2"/>
+          </g>
+
+          <!-- rabo -->
+          <path class="tail" d="M196,150 q34,6 30,46 q-2,16 -14,18 q10,-22 -2,-40 q-8,-12 -22,-12 z" fill="var(--tail)"/>
+          <!-- pernas -->
+          <rect x="92"  y="178" width="20" height="44" rx="9" fill="var(--coat)"/>
+          <rect x="148" y="178" width="20" height="44" rx="9" fill="var(--coat)"/>
+          <rect x="78"  y="176" width="20" height="46" rx="9" fill="var(--coat)"/>
+          <rect x="162" y="176" width="20" height="46" rx="9" fill="var(--coat)"/>
+          <rect x="78"  y="212" width="20" height="12" rx="5" fill="#4a3b2a"/>
+          <rect x="162" y="212" width="20" height="12" rx="5" fill="#4a3b2a"/>
+          <rect x="92"  y="212" width="20" height="12" rx="5" fill="#4a3b2a"/>
+          <rect x="148" y="212" width="20" height="12" rx="5" fill="#4a3b2a"/>
+          <!-- corpo -->
+          <ellipse cx="130" cy="156" rx="74" ry="54" fill="var(--coat)"/>
+          <ellipse cx="130" cy="172" rx="58" ry="38" fill="var(--coat-lt)"/>
+          <!-- pescoço -->
+          <path d="M104,120 q26,-30 52,0 l-6,40 l-40,0 z" fill="var(--coat)"/>
+
+          <!-- ===== ACESSÓRIOS DE PESCOÇO ===== -->
+          <g id="acc-bandana" style="display:none"><path d="M108,128 q22,16 44,0 l-6,18 q-16,8 -32,0 z" fill="#d64545"/><circle cx="119" cy="138" r="1.6" fill="#fff"/><circle cx="130" cy="142" r="1.6" fill="#fff"/><circle cx="141" cy="138" r="1.6" fill="#fff"/></g>
+          <g id="acc-lenco" style="display:none"><path d="M108,128 q22,16 44,0 l-6,18 q-16,8 -32,0 z" fill="#f2a73b"/><path d="M120,130 l4,16 M132,132 l4,14" stroke="#c97f17" stroke-width="2"/></g>
+
+          <!-- cabeça -->
+          <ellipse cx="130" cy="92" rx="44" ry="42" fill="var(--coat)"/>
+          <!-- crina -->
+          <path d="M130,50 q-8,30 -2,52 q4,-26 4,-52 z M130,50 q8,30 2,52 q-4,-26 -4,-52 z" fill="var(--mane)"/>
+          <path d="M108,62 q-6,18 2,34 q2,-20 0,-34 z" fill="var(--mane)"/>
+          <!-- orelhas -->
+          <g class="ear-l"><ellipse cx="100" cy="44" rx="13" ry="30" fill="var(--coat)" transform="rotate(-16 100 44)"/><ellipse cx="100" cy="46" rx="6" ry="20" fill="#e3b3aa" transform="rotate(-16 100 44)"/></g>
+          <g class="ear-r"><ellipse cx="160" cy="44" rx="13" ry="30" fill="var(--coat)" transform="rotate(16 160 44)"/><ellipse cx="160" cy="46" rx="6" ry="20" fill="#e3b3aa" transform="rotate(16 160 44)"/></g>
+          <!-- ===== FLOR NA ORELHA ===== -->
+          <g id="acc-flor" style="display:none" transform="translate(96 26)">
+            <circle r="5" fill="#ffd23f"/>
+            <g fill="#ff7eb3"><circle cx="0" cy="-8" r="4"/><circle cx="8" cy="0" r="4"/><circle cx="0" cy="8" r="4"/><circle cx="-8" cy="0" r="4"/></g>
+            <circle r="3" fill="#ffd23f"/>
+          </g>
+          <!-- focinho -->
+          <ellipse cx="130" cy="108" rx="30" ry="24" fill="var(--muz)"/>
+          <ellipse cx="118" cy="112" rx="4" ry="6" fill="#6d7177"/>
+          <ellipse cx="142" cy="112" rx="4" ry="6" fill="#6d7177"/>
+          <!-- olhos -->
+          <circle cx="113" cy="86" r="9" fill="#fff"/>
+          <circle cx="147" cy="86" r="9" fill="#fff"/>
+          <circle cx="114" cy="88" r="5.5" fill="#2a2118"/>
+          <circle cx="146" cy="88" r="5.5" fill="#2a2118"/>
+          <circle cx="116" cy="86" r="2" fill="#fff"/>
+          <circle cx="148" cy="86" r="2" fill="#fff"/>
+          <!-- bochecha rosada -->
+          <ellipse cx="100" cy="100" rx="7" ry="5" fill="#e8b9b0" opacity=".7"/>
+          <ellipse cx="160" cy="100" rx="7" ry="5" fill="#e8b9b0" opacity=".7"/>
+          <!-- sorrisinho -->
+          <path d="M122,120 q8,7 16,0" stroke="#6d7177" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- ===== ACESSÓRIOS DE OLHOS ===== -->
+          <g id="acc-oculosesc" style="display:none"><rect x="104" y="79" width="18" height="13" rx="5" fill="#1c1c22"/><rect x="138" y="79" width="18" height="13" rx="5" fill="#1c1c22"/><rect x="122" y="83" width="16" height="3" fill="#1c1c22"/><rect x="106" y="81" width="6" height="3" rx="1.5" fill="#5a5a66"/></g>
+          <g id="acc-oculosnerd" style="display:none" fill="none" stroke="#2a2118" stroke-width="2.4"><circle cx="113" cy="86" r="11"/><circle cx="147" cy="86" r="11"/><path d="M124,86 h12"/></g>
+
+          <!-- ===== ACESSÓRIOS DE CABEÇA ===== -->
+          <g id="acc-chapeu" style="display:none">
+            <ellipse cx="130" cy="56" rx="50" ry="11" fill="#6b4a2b"/>
+            <path d="M104,56 q4,-34 26,-34 q22,0 26,34 z" fill="#7d5630"/>
+            <path d="M104,52 q26,8 52,0 l0,5 q-26,8 -52,0 z" fill="#5a3d22"/>
+            <path d="M130,30 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z" fill="#ffd23f"/>
+          </g>
+          <g id="acc-cartola" style="display:none">
+            <ellipse cx="130" cy="58" rx="44" ry="9" fill="#1c1c22"/>
+            <rect x="104" y="14" width="52" height="44" rx="5" fill="#2a2a30"/>
+            <rect x="104" y="44" width="52" height="8" fill="#c0392b"/>
+          </g>
+          <g id="acc-astronauta" style="display:none">
+            <circle cx="130" cy="86" r="56" fill="#bfe9ff" opacity=".28" stroke="#dff4ff" stroke-width="3"/>
+            <path d="M96,64 q12,-14 30,-14" stroke="#fff" stroke-width="4" fill="none" opacity=".7" stroke-linecap="round"/>
+          </g>
+          <g id="acc-coroa" style="display:none">
+            <path d="M104,40 l8,-26 12,16 6,-22 6,22 12,-16 8,26 z" fill="#ffd23f" stroke="#e0a300" stroke-width="2"/>
+            <rect x="104" y="38" width="52" height="8" rx="2" fill="#e0a300"/>
+            <circle cx="112" cy="16" r="3" fill="#ff5d73"/><circle cx="130" cy="10" r="3" fill="#4cc9f0"/><circle cx="148" cy="16" r="3" fill="#6a994e"/>
+          </g>
+        </svg>
+      </div>
+
+      <div id="taphint">👆 Faça carinho no jegue!</div>
+      <div id="golden" role="button" aria-label="Pegue o Jegue Dourado!">🫏</div>
+    </section>
+
+    <!-- PAINEL DE GESTÃO -->
+    <section class="panel" aria-label="Gestão da fazenda">
+      <nav class="tabs">
+        <button class="tab active" data-tab="estabulo"><span class="ti">🏠</span>Estábulo</button>
+        <button class="tab" data-tab="loja"><span class="ti">🛒</span>Loja</button>
+        <button class="tab" data-tab="visual"><span class="ti">👕</span>Visual</button>
+        <button class="tab" data-tab="lendas"><span class="ti">⭐</span>Lendas</button>
+        <button class="tab" data-tab="conquistas"><span class="ti">🏆</span>Conquistas</button>
+      </nav>
+      <div class="qty-row">
+        <span class="lbl">Comprar:</span>
+        <button class="qbtn active" data-qty="1">x1</button>
+        <button class="qbtn" data-qty="10">x10</button>
+        <button class="qbtn" data-qty="100">x100</button>
+        <button class="qbtn" data-qty="max">Máx</button>
+      </div>
+      <div class="list" id="list"></div>
+    </section>
+  </div>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="footer">
+    <button class="fbtn" id="btn-save">💾 Salvar</button>
+    <button class="fbtn" id="btn-sound">🔊 Som</button>
+    <button class="fbtn" id="btn-music">🎵 Música (off)</button>
+    <button class="fbtn danger" id="btn-reset">🧹 Recomeçar</button>
+  </footer>
+  <div class="tip">Salva sozinho a cada 15s · funciona offline e no celular · feito com 💛 no sertão</div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div id="overlay">
+  <div class="modal">
+    <h2 id="m-title"></h2>
+    <div class="mtext" id="m-text"></div>
+    <div class="m-row" id="m-row"></div>
+  </div>
+</div>
+
+<!-- ===== TOASTS ===== -->
+<div id="toasts"></div>
+
+<!-- ===== SCRIPTS (ordem de dependência) =====
+     Scripts clássicos (não-módulos) de propósito: funcionam tanto
+     abrindo o arquivo direto (file://) quanto publicado num servidor. -->
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/state.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/economy.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/achievements.js"></script>
+<script src="js/buffs.js"></script>
+<script src="js/news.js"></script>
+<script src="js/customize.js"></script>
+<script src="js/scenefx.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
