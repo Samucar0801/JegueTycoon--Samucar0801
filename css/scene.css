@@ -1,0 +1,121 @@
+/* ============================================================
+   scene.css — A CENA DO JEGUE (o coração do jogo)
+   Parallax da caatinga, jegue 3D, partículas, jegue dourado.
+   ============================================================ */
+#scene {
+  position: relative;
+  border-radius: var(--radius);
+  border: 3px solid var(--borda);
+  box-shadow: var(--sh-card);
+  overflow: hidden;
+  min-height: 420px;
+  background: linear-gradient(180deg, var(--ceu-1) 0%, var(--ceu-2) 45%, var(--terra-1) 46%, var(--terra-2) 100%);
+  perspective: 900px;
+  cursor: pointer;
+  user-select: none;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* camadas de parallax */
+#sun {
+  position: absolute; top: 26px; right: 40px; width: 76px; height: 76px;
+  border-radius: 50%; background: radial-gradient(circle at 40% 40%, #fff6c8, var(--sol));
+  box-shadow: 0 0 40px 12px rgba(245,178,31,.55); z-index: 1;
+}
+#hills {
+  position: absolute; left: -5%; right: -5%; bottom: 38%; height: 130px; z-index: 2;
+  background:
+    radial-gradient(60px 60px at 20% 100%, var(--morro) 70%, transparent 72%),
+    radial-gradient(90px 70px at 55% 100%, var(--morro) 70%, transparent 72%),
+    radial-gradient(70px 65px at 85% 100%, var(--morro) 70%, transparent 72%);
+  filter: saturate(.85) brightness(.95);
+}
+.cactus { position: absolute; bottom: 30%; font-size: 40px; z-index: 3; filter: drop-shadow(0 3px 0 rgba(0,0,0,.12)); }
+#c1 { left: 8%; }
+#c2 { right: 12%; bottom: 26%; font-size: 52px; }
+.tuft { position: absolute; bottom: 6%; font-size: 22px; z-index: 3; opacity: .9; }
+.tuft.t1 { left: 16%; } .tuft.t2 { left: 42%; bottom: 12%; } .tuft.t3 { right: 20%; bottom: 9%; }
+
+/* o jegue (alvo do clique) */
+#jegue-wrap {
+  position: relative; z-index: 6;
+  width: min(58%, 280px);
+  transform-style: preserve-3d;
+  transition: transform .15s ease-out;
+  filter: drop-shadow(0 14px 10px rgba(80,45,10,.28));
+}
+#jegue { width: 100%; height: auto; display: block; transform-origin: 50% 90%; }
+#jegue-wrap:hover { filter: drop-shadow(0 18px 12px rgba(80,45,10,.34)) brightness(1.03); }
+
+/* dica de toque */
+#taphint {
+  position: absolute; z-index: 7; bottom: 14px; left: 50%; transform: translateX(-50%);
+  background: var(--tinta); color: var(--sol-claro);
+  padding: 6px 16px; border-radius: var(--radius-pill);
+  font-weight: 800; font-size: var(--fs-sm); white-space: nowrap;
+  animation: bob 1.4s ease-in-out infinite; pointer-events: none;
+}
+
+/* texto flutuante do clique */
+.floaty {
+  position: absolute; z-index: 8; pointer-events: none;
+  font-family: var(--display); font-weight: 700; font-size: 22px;
+  color: var(--telha-esc); text-shadow: 0 2px 0 #fff, 0 0 6px rgba(255,255,255,.6);
+  animation: floatup 1.1s ease-out forwards;
+}
+.floaty.big { font-size: 30px; color: var(--forro); }
+
+/* partículas (emoji) */
+.particle {
+  position: absolute; z-index: 8; pointer-events: none; font-size: 20px;
+  animation: pfly .85s ease-out forwards;
+}
+
+/* ondinha do clique */
+.ripple {
+  position: absolute; z-index: 5; width: 24px; height: 24px; margin: -12px 0 0 -12px;
+  border-radius: 50%; border: 3px solid rgba(245,178,31,.8); pointer-events: none;
+  animation: rip .6s ease-out forwards;
+}
+
+/* jegue dourado */
+#golden {
+  position: absolute; z-index: 9; font-size: 60px; cursor: pointer; display: none;
+  filter: drop-shadow(0 0 16px var(--sol)) drop-shadow(0 0 28px #fff6);
+  animation: goldfloat 1.6s ease-in-out infinite;
+}
+#golden.show { display: block; }
+
+/* barra de buffs ativos */
+#buffbar {
+  position: absolute; z-index: 8; top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: 92%;
+}
+.buff-chip {
+  background: var(--forro); color: #fff; font-weight: 800; font-size: var(--fs-xs);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  box-shadow: 0 3px 0 #5e2d77, 0 0 10px rgba(142,68,173,.5);
+  animation: pop .3s ease-out;
+}
+
+/* a "ferramenta" de clique que aparece dando o tapinha */
+.clicktool {
+  position: absolute; z-index: 9; pointer-events: none; font-size: 30px;
+  transform: translate(-50%, -50%);
+  animation: toolpat .46s ease-out forwards;
+}
+
+/* brilho de pelagens especiais (aplicado no wrap) */
+#jegue-wrap.glow-gold { animation: glowGold 1.8s ease-in-out infinite; }
+#jegue-wrap.glow-cosmic { animation: glowCosmic 1.8s ease-in-out infinite; }
+
+/* moeda 3D girando no header */
+#coin3d {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #fff3b0, var(--sol) 60%, var(--telha) 120%);
+  border: 3px solid var(--telha-esc);
+  display: grid; place-items: center; font-size: 22px;
+  box-shadow: inset -3px -3px 6px rgba(0,0,0,.18), 0 4px 0 var(--telha-esc);
+  animation: spincoin 3.2s linear infinite;
+  transform-style: preserve-3d; flex: 0 0 auto;
+}

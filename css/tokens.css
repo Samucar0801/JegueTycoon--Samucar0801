@@ -1,0 +1,62 @@
+/* ============================================================
+   tokens.css — DESIGN TOKENS (variáveis de CSS)
+   Mexa aqui para mudar a "cara" do jogo inteiro de uma vez.
+   Tema: caatinga ensolarada / festa junina (sol, mandacaru, telha).
+   ============================================================ */
+:root {
+  /* — paleta — */
+  --sol:        #f5b21f;   /* sol / moeda */
+  --sol-claro:  #ffd56b;
+  --telha:      #d96a3c;   /* terracota de telhado, usada com parcimônia */
+  --telha-esc:  #b14e29;
+  --mandacaru:  #5a8a3c;   /* verde do cacto / pasto */
+  --mandacaru-esc:#3f6b27;
+  --forro:      #8e44ad;   /* roxo de festa / prestígio */
+  --forro-claro:#b06fd0;
+  --azul:       #4cb5e0;   /* céu / jegue dourado brilho */
+
+  --tinta:      #3b2410;   /* texto principal (café escuro) */
+  --tinta-suave:#6e5238;
+  --creme:      #fffdf4;   /* cartão */
+  --creme-2:    #fbf3df;
+  --area:       #f6e3b8;   /* fundo de painel */
+  --borda:      #e4c98a;
+  --borda-esc:  #caa55e;
+
+  /* — fundo do app (sol baixo no sertão) — */
+  --bg-1: #ffe9a8;
+  --bg-2: #f6c860;
+  --bg-3: #e89a3c;
+
+  /* — cena (céu de dia) — */
+  --ceu-1: #aee4ff;
+  --ceu-2: #d8f0ff;
+  --terra-1: #e8b56a;
+  --terra-2: #cf8f44;
+  --morro: #c98a3e;
+
+  /* — tipografia — */
+  --display: "Fredoka", "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* — escala de tamanhos — */
+  --fs-xl: clamp(28px, 5vw, 46px);
+  --fs-lg: clamp(20px, 3vw, 26px);
+  --fs-md: 15px;
+  --fs-sm: 13px;
+  --fs-xs: 11px;
+
+  /* — espaçamento — */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;  --sp-5: 24px;  --sp-6: 32px;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  /* — sombras / relevo cartoon — */
+  --sh-card: 0 4px 0 var(--borda-esc), 0 8px 18px rgba(80,45,10,.18);
+  --sh-soft: 0 6px 20px rgba(80,45,10,.20);
+  --sh-btn: 0 4px 0 var(--mandacaru-esc);
+  --sh-btn-press: 0 1px 0 var(--mandacaru-esc);
+
+  --ring: 0 0 0 3px rgba(245,178,31,.55);
+}

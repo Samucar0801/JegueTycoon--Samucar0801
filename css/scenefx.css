@@ -1,0 +1,80 @@
+/* ============================================================
+   scenefx.css — O CENÁRIO REAGINDO AO JOGO
+   Cada poder (buff) muda o clima da cena, e a fazenda ganha
+   decorações conforme você desbloqueia geradores.
+   ============================================================ */
+
+/* camada de clima por cima da cena (luzes, estrelas, etc.) */
+.weather {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  opacity: 0; transition: opacity .5s; background-size: cover;
+}
+#scene.sc-buffed .weather { opacity: 1; }
+
+/* leve aura quando QUALQUER poder está ativo */
+#scene.sc-buffed { box-shadow: var(--sh-card), inset 0 0 60px rgba(245,178,31,.15); }
+
+/* ---- FESTA (produção x7): tudo mais quente e festeiro ---- */
+#scene.sc-festa { background: linear-gradient(180deg, #ffe1a8 0%, #ffd0c0 45%, var(--terra-1) 46%, var(--terra-2) 100%); }
+#scene.sc-festa .weather { background:
+  radial-gradient(circle at 15% 20%, rgba(255,93,115,.5) 0 6px, transparent 7px),
+  radial-gradient(circle at 35% 12%, rgba(76,201,240,.5) 0 6px, transparent 7px),
+  radial-gradient(circle at 60% 18%, rgba(106,153,78,.5) 0 6px, transparent 7px),
+  radial-gradient(circle at 82% 14%, rgba(245,178,31,.6) 0 6px, transparent 7px);
+  animation: twinkle 1.2s steps(2) infinite; }
+
+/* ---- TURBO (clique x777): tom acelerado, vinheta âmbar + linhas ---- */
+#scene.sc-turbo { background: linear-gradient(180deg, #ffe9b8, #ffd98a 45%, var(--terra-1) 46%, var(--terra-2)); filter: saturate(1.15); }
+#scene.sc-turbo .weather { background: repeating-linear-gradient(90deg, transparent 0 38px, rgba(245,178,31,.16) 38px 40px); animation: rush .5s linear infinite; }
+
+/* ---- FORRÓ (frenético): festa de cor pulsando ---- */
+#scene.sc-forro .weather { background: radial-gradient(120% 80% at 50% 0%, rgba(142,68,173,.30), transparent 70%); animation: discoHue 2.4s linear infinite; mix-blend-mode: multiply; }
+
+/* ---- CÓSMICO (produção x77): vira espaço estrelado ---- */
+#scene.sc-cosmico { background: linear-gradient(180deg, #221a3e 0%, #3a2c63 45%, #4a3b6a 46%, #2b2350 100%); }
+#scene.sc-cosmico .weather { background:
+  radial-gradient(circle at 20% 30%, #fff 0 1.5px, transparent 2px),
+  radial-gradient(circle at 70% 20%, #fff 0 1.5px, transparent 2px),
+  radial-gradient(circle at 45% 60%, #fff 0 1px, transparent 2px),
+  radial-gradient(circle at 85% 50%, #fff 0 1.5px, transparent 2px),
+  radial-gradient(circle at 30% 75%, #fff 0 1px, transparent 2px);
+  animation: twinkle 1.6s steps(2) infinite; }
+#scene.sc-cosmico #sun { background: radial-gradient(circle at 40% 40%, #fff, #b06fd0); box-shadow: 0 0 40px 12px rgba(176,111,208,.6); }
+
+/* ---- eventos pontuais: vaquejada / feira / chuva / viral ---- */
+#scene.sc-vaquejada { filter: saturate(1.1) contrast(1.04); }
+#scene.sc-feira .weather { background: radial-gradient(120% 70% at 50% 0%, rgba(245,178,31,.22), transparent 65%); }
+#scene.sc-chuva .weather { background: repeating-linear-gradient(105deg, rgba(245,178,31,.5) 0 2px, transparent 2px 9px); animation: coinrain .5s linear infinite; }
+#scene.sc-viral .weather { background: radial-gradient(120% 80% at 50% 0%, rgba(76,181,224,.25), transparent 70%); }
+
+@keyframes twinkle { 0% { opacity: .55; } 100% { opacity: 1; } }
+@keyframes rush { from { background-position: 0 0; } to { background-position: 40px 0; } }
+@keyframes coinrain { from { background-position: 0 0; } to { background-position: 0 18px; } }
+@keyframes discoHue { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+
+/* ---------- DECORAÇÕES DE PROGRESSO ---------- */
+.dec { position: absolute; z-index: 3; pointer-events: none; }
+#dec-vaquejada { bottom: 30%; left: 6%; font-size: 30px; filter: drop-shadow(0 3px 0 rgba(0,0,0,.12)); }
+#dec-parque    { top: 24%; left: 10%; font-size: 40px; opacity: .9; animation: bob 4s ease-in-out infinite; }
+#dec-influencer{ top: 30%; right: 12%; font-size: 24px; animation: floaty-heart 3s ease-in-out infinite; }
+#dec-espaco    { top: 18%; left: 22%; font-size: 30px; animation: fly 7s linear infinite; }
+#dec-multi     { top: 22%; right: 18%; font-size: 34px; opacity: .85; animation: spin 6s linear infinite; }
+
+/* bandeirinhas de festa junina (gerador Forró) */
+.bunting {
+  position: absolute; top: 0; left: 0; right: 0; height: 26px; z-index: 3; pointer-events: none;
+  background:
+    repeating-linear-gradient(135deg, #ff5d73 0 14px, transparent 14px 16px),
+    repeating-linear-gradient(45deg, #4cc9f0 0 14px, transparent 14px 16px);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 30px) top/30px 14px repeat-x;
+          mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 30px) top/30px 14px repeat-x;
+  background-blend-mode: multiply; opacity: .9;
+}
+
+@keyframes floaty-heart { 0%,100% { transform: translateY(0); opacity: .7; } 50% { transform: translateY(-10px); opacity: 1; } }
+@keyframes fly { 0% { transform: translate(0,0) rotate(8deg); } 100% { transform: translate(220px,-30px) rotate(8deg); } }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .weather, #dec-parque, #dec-influencer, #dec-espaco, #dec-multi { animation: none !important; }
+}
